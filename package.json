@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "tsc",
+    "build": "unbuild",
     "start": "node dist/index.js",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
@@ -44,6 +44,7 @@
     "jest": "^30.0.3",
     "ts-jest": "^29.4.0",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "unbuild": "^3.5.0"
   }
 }
