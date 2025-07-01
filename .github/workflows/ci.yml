@@ -49,13 +49,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'pnpm'
+          cache: 'npm'
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Install npm
+        run: npm install -g npm
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
       - name: Generate Prisma client
         run: pnpx prisma generate
@@ -64,4 +64,4 @@ jobs:
         run: pnpx prisma db push
 
       - name: Run tests
-        run: pnpm test -- --coverage
+        run: npm test -- --coverage
