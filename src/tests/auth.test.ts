@@ -1,13 +1,33 @@
-import jwt from 'jsonwebtoken'
+import request from 'supertest'
+import app from '../index'
+import { PrismaClient } from '@prisma/client'
 
-describe('JWT Token', () => {
-  const secret = 'test-secret'
-  const payload = { id: 'user123', role: 'ADMIN' }
+const prisma = new PrismaClient()
 
-  it('should generate a valid token', () => {
-    const token = jwt.sign(payload, secret, { expiresIn: '1h' })
-    const decoded = jwt.verify(token, secret) as typeof payload
-    expect(decoded.id).toBe('user123')
-    expect(decoded.role).toBe('ADMIN')
+describe('Auth Routes', () => {
+  const email = 'testuser@example.com'
+  const password = '123456'
+
+  afterAll(async () => {
+    await prisma.user.deleteMany({ where: { email } })
+    await prisma.$disconnect()
+  })
+
+  it('should register a user', async () => {
+    const res = await request(app).post('/api/auth/register').send({
+      email,
+      password,
+      role: 'USER',
+    })
+    expect(res.status).toBe(201)
+  })
+
+  it('should login a user and return token', async () => {
+    const res = await request(app).post('/api/auth/login').send({
+      email,
+      password,
+    })
+    expect(res.status).toBe(200)
+    expect(res.body.token).toBeDefined()
   })
 })
