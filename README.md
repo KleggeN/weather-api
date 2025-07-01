@@ -119,7 +119,10 @@ pnpm start
 ```bash
 pnpm test
 ```
-
+with coverage
+```bash
+pnpm test:coverage
+```
 ---
 
 ## 🔐 Auth Endpoints
