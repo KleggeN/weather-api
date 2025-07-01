@@ -1,6 +1,7 @@
 import request from 'supertest'
 import app from '../index'
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcrypt'
 
 const prisma = new PrismaClient()
 
@@ -8,9 +9,16 @@ describe('Admin Routes', () => {
   let adminToken = ''
 
   beforeAll(async () => {
+    await prisma.user.create({
+      data: {
+        email: 'admin@example.com',
+        password: await bcrypt.hash('adminpassword', 10),
+        role: 'ADMIN',
+      },
+    })
     const login = await request(app).post('/api/auth/login').send({
       email: 'admin@example.com',
-      password: 'admin123',
+      password: 'adminpassword',
     })
     adminToken = login.body.token
   })
@@ -40,7 +48,7 @@ describe('Admin Routes', () => {
   afterAll(async () => {
     await prisma.user.deleteMany({
       where: {
-        email: { in: ['createdbyadmin@example.com'] },
+        email: { in: ['createdbyadmin@example.com','admin@example.com'] },
       },
     })
     await prisma.$disconnect()
