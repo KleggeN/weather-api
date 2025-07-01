@@ -3,5 +3,7 @@ export default {
     testEnvironment: 'node',
     testMatch: ['**/tests/**/*.test.ts'],
     moduleFileExtensions: ['ts', 'js'],
+    detectOpenHandles: true,
+    forceExit: true
   }
   
