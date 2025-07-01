@@ -11,17 +11,25 @@ export const getAllUsers = async (req: Request, res: Response) => {
   res.json(users)
 }
 
-export const createUser = async (req: Request, res: Response) => {
+export const createUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password, role } = req.body
-  if (!email || !password || !role) return res.status(400).json({ message: 'email, password, role required' })
+
+  if (!email || !password || !role) {
+    res.status(400).json({ message: 'email, password, role required' })
+    return
+  }
 
   const exists = await prisma.user.findUnique({ where: { email } })
-  if (exists) return res.status(409).json({ message: 'Email already exists' })
+  if (exists) {
+    res.status(409).json({ message: 'Email already exists' })
+    return
+  }
 
   const hashed = await bcrypt.hash(password, 10)
   const user = await prisma.user.create({
-    data: { email, password: hashed, role }
+    data: { email, password: hashed, role },
   })
 
   res.status(201).json({ id: user.id, email: user.email, role: user.role })
 }
+
