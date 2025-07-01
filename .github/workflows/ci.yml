@@ -37,8 +37,8 @@ jobs:
 
     env:
       DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/weather"
-      JWT_SECRET: "test-secret"
-      OPENWEATHER_API_KEY: "dummy-key"
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
       PORT: 3000
 
     steps:
@@ -60,4 +60,4 @@ jobs:
         run: npx prisma db push
 
       - name: Run tests
-        run: npm test -- --coverage
+        run: npm test
